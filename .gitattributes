@@ -1,0 +1,4 @@
+* text=auto eol=lf
+catalog/providers.catalog.json -text
+catalog/providers.catalog.schema.json -text
+catalog/providers.catalog.sig -text
