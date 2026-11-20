@@ -126,7 +126,9 @@ def _check_recipe(recipe: dict, provider_id: str, capability: str, trusted_hosts
         raise CatalogError(f"{label} must not define executable mappings unless supported")
 
     request_ids: set[str] = set()
-    requests = recipe.get("requests", [])
+    requests = list(recipe.get("requests", []))
+    if isinstance(recipe.get("request"), dict):
+        requests.append(recipe["request"])
     for request in requests:
         request_id = request.get("id")
         if request_id in request_ids:
@@ -134,7 +136,11 @@ def _check_recipe(recipe: dict, provider_id: str, capability: str, trusted_hosts
         if request_id is not None:
             request_ids.add(request_id)
         if "url" in request:
-            parsed = urlsplit(request["url"])
+            try:
+                parsed = urlsplit(request["url"])
+                _ = parsed.port
+            except ValueError as exc:
+                raise CatalogError(f"{label} contains an invalid static request URL") from exc
             if parsed.scheme.lower() != "https" or parsed.username or parsed.password or parsed.query or parsed.fragment:
                 raise CatalogError(f"{label} contains an unsafe static request URL")
             if normalize_host(parsed.hostname or "") not in trusted_hosts:
@@ -200,7 +206,11 @@ def validate_catalog(catalog: object, schema: object) -> None:
             if route_id in route_ids:
                 raise CatalogError(f"Provider {provider_id!r} has duplicate route ID: {route['id']}")
             route_ids.add(route_id)
-            parsed = urlsplit(route["baseUrl"])
+            try:
+                parsed = urlsplit(route["baseUrl"])
+                route_port = parsed.port
+            except ValueError as exc:
+                raise CatalogError(f"Provider {provider_id!r} has a route URL with an invalid port") from exc
             if parsed.scheme.lower() != "https" and not (
                 parsed.hostname in ("localhost", "127.0.0.1", "::1")
             ):
@@ -211,8 +221,11 @@ def validate_catalog(catalog: object, schema: object) -> None:
             if route_host not in trusted_hosts:
                 raise CatalogError(f"Provider {provider_id!r} route host is absent from trustedHosts")
             normalized_url = f"{parsed.scheme.lower()}://{route_host}"
-            if parsed.port is not None:
-                normalized_url += f":{parsed.port}"
+            if route_port is not None and not (
+                (parsed.scheme.lower() == "https" and route_port == 443)
+                or (parsed.scheme.lower() == "http" and route_port == 80)
+            ):
+                normalized_url += f":{route_port}"
             normalized_url += parsed.path.rstrip("/")
             if normalized_url in route_urls:
                 raise CatalogError(f"Provider {provider_id!r} has duplicate route URL: {route['baseUrl']}")

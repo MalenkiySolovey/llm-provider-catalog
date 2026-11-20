@@ -103,6 +103,13 @@ class ProviderCatalogTests(unittest.TestCase):
             )
         )
 
+    def test_single_request_url_must_use_trusted_host(self) -> None:
+        self._expect_invalid(
+            lambda c: c["providers"][0]["capabilities"]["models"]["request"].__setitem__(
+                "url", "https://untrusted.example/models"
+            )
+        )
+
     def test_bad_json_pointer_escape_is_rejected(self) -> None:
         def mutate(c):
             for provider in c["providers"]:
