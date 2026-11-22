@@ -1,8 +1,8 @@
 {
   "$schema": "./providers.catalog.schema.json",
   "schemaVersion": 1,
-  "catalogVersion": 6,
-  "updatedAt": "2026-11-22T01:35:52Z",
+  "catalogVersion": 7,
+  "updatedAt": "2026-11-22T11:32:31Z",
   "minAppVersion": "0.1.0",
   "providers": [
     {
@@ -653,6 +653,11 @@
             "method": "GET",
             "url": "https://www.hejuapi.com/api/usage/token/",
             "auth": "bearer"
+          },
+          "quotaDisplay": {
+            "currency": "USD",
+            "symbol": "$",
+            "rawUnitsPerBaseUnit": 500000
           }
         }
       },
@@ -683,7 +688,14 @@
           "sourceType": "observed-readonly",
           "source": "https://github.com/QuantumNous/new-api/blob/bdef117505247769268b209665fb3ad7554c3da7/controller/token.go",
           "verifiedAt": "2026-11-22T00:00:00Z",
-          "note": "Read-only Global route observations confirmed finite and unlimited key quota in raw units. HeJu redirects the path without a trailing slash. The account wallet and currency are unverified."
+          "note": "Read-only Global route observations confirmed finite and unlimited key quota in raw units. HeJu redirects the path without a trailing slash. The account wallet remains unverified."
+        },
+        {
+          "capability": "keyUsage",
+          "sourceType": "observed-readonly",
+          "source": "https://www.hejuapi.com/api/status",
+          "verifiedAt": "2026-11-22T11:32:31Z",
+          "note": "The public pricing presentation declares USD. The key dashboard displayed $5.00 for the qualified 2500000-unit limit, matching the New API divisor of 500000. The rule applies to key quota on the Global route."
         },
         {
           "capability": "balance",

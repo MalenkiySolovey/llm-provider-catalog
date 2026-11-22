@@ -8,6 +8,8 @@ Capability recipes are declarative data. Supported recipes may describe bounded 
 
 The optional `keyUsage` recipe describes API-key quota alongside the existing `usage` and `balance` recipes. `new-api-token-usage` uses one bearer GET, with either an exact `url` or a `path` rooted at the active HTTPS origin. Consumers must restrict the request to that origin and reject redirects. The New API response expresses key-scoped raw quota and an explicit unlimited state. [New API token usage](https://docs.newapi.pro/en/docs/api/management/token-management/usage-token-get)
 
+`keyUsage.quotaDisplay` describes a verified display denomination for the recipe and route. It identifies the currency code and display symbol. Consumers calculate the display amount as the raw quota divided by `rawUnitsPerBaseUnit` and multiplied by `multiplier`, which defaults to 1. Preserve the raw metrics and their API-key scope. When the conversion is absent, show the raw units. An unlimited key still has no finite limit or remainder.
+
 Host entries are canonical lowercase DNS names or IP literals without a scheme, path, port, wildcard, or surrounding whitespace. Route URLs use HTTPS, except loopback development endpoints permitted by the consumer contract. Route URLs must not embed credentials, query strings, or fragments.
 
 Response pointers use RFC 6901 JSON Pointer escaping. A tilde is permitted only as `~0` or `~1`. Multi-request recipe identifiers must be unique and response mappings may refer only to declared identifiers.

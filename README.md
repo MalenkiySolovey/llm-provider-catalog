@@ -6,7 +6,7 @@ The repository contains the canonical JSON catalog, its JSON Schema, and the exi
 
 ## Contents
 
-- `catalog/providers.catalog.json` — signed catalog payload (schema version 1, content version 6).
+- `catalog/providers.catalog.json` — signed catalog payload (schema version 1, content version 7).
 - `catalog/providers.catalog.schema.json` — Draft 2020-12 structural schema.
 - `catalog/providers.catalog.sig` — base64 detached ECDSA signature over the exact JSON bytes.
 - `trust/official-catalog-public-key.spki.b64` — public verification key only.

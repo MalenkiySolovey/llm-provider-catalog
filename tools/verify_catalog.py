@@ -124,6 +124,8 @@ def _check_recipe(recipe: dict, provider_id: str, capability: str, trusted_hosts
         raise CatalogError(f"{label} has supported status with non-runnable strategy")
     if status != "supported" and any(key in recipe for key in ("request", "requests", "response", "outputs")):
         raise CatalogError(f"{label} must not define executable mappings unless supported")
+    if "quotaDisplay" in recipe and capability != "keyUsage":
+        raise CatalogError(f"{label} cannot declare quotaDisplay outside keyUsage")
 
     if capability == "keyUsage":
         request = recipe.get("request", {})

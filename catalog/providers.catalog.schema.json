@@ -276,7 +276,22 @@
         "outputs": {
           "$ref": "#/$defs/RecipeResponseMapping",
           "description": "Named response mappings and bounded arithmetic outputs for multi-request recipes."
+        },
+        "quotaDisplay": {
+          "$ref": "#/$defs/QuotaDisplayConversion",
+          "description": "Optional display denomination for a supported keyUsage recipe."
         }
+      }
+    },
+    "QuotaDisplayConversion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [ "currency", "symbol", "rawUnitsPerBaseUnit" ],
+      "properties": {
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "symbol": { "type": "string", "pattern": "^[^\\s\\u0000-\\u001F\\u007F]{1,8}$" },
+        "rawUnitsPerBaseUnit": { "type": "integer", "minimum": 1, "maximum": 9223372036854775807 },
+        "multiplier": { "type": "number", "exclusiveMinimum": 0, "default": 1 }
       }
     },
     "RecipeRequest": {
