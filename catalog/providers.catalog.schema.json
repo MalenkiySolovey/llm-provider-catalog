@@ -222,6 +222,10 @@
         },
         "usage": {
           "$ref": "#/$defs/ProviderCapabilityRecipe"
+        },
+        "keyUsage": {
+          "$ref": "#/$defs/ProviderCapabilityRecipe",
+          "description": "Optional API-key scoped usage recipe independent of balance and general usage."
         }
       }
     },
@@ -247,6 +251,7 @@
           "enum": [
             "openai-models",
             "json-http",
+            "new-api-token-usage",
             "unsupported",
             "unknown",
             "built-in-adapter"
@@ -449,7 +454,7 @@
       "properties": {
         "capability": {
           "type": "string",
-          "description": "Target capability ('models', 'balance', 'usage', 'wireApi')."
+          "description": "Target capability ('models', 'balance', 'usage', 'keyUsage', 'wireApi')."
         },
         "sourceType": {
           "type": "string",

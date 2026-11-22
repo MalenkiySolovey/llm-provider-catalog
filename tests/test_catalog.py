@@ -38,7 +38,7 @@ class ProviderCatalogTests(unittest.TestCase):
             self.catalog_bytes, self.schema_bytes, self.signature, self.public_key
         )
         self.assertEqual(catalog["schemaVersion"], 1)
-        self.assertEqual(catalog["catalogVersion"], 4)
+        self.assertEqual(catalog["catalogVersion"], 5)
         self.assertEqual(len(catalog["providers"]), 8)
 
     def test_expected_provider_ids_and_conservative_heju_capabilities(self) -> None:
@@ -58,6 +58,15 @@ class ProviderCatalogTests(unittest.TestCase):
         )
         heju = providers["hejuapi"]["capabilities"]
         self.assertEqual(heju["balance"]["status"], "unknown")
+        self.assertEqual(heju["usage"]["request"]["path"], "/dashboard/billing/usage")
+        self.assertEqual(heju["keyUsage"]["request"]["url"], "https://www.hejuapi.com/api/usage/token")
+
+    def test_key_usage_requires_a_bearer_get(self) -> None:
+        def add_invalid_key_usage(catalog: dict) -> None:
+            heju = next(provider for provider in catalog["providers"] if provider["id"] == "hejuapi")
+            heju["capabilities"]["keyUsage"]["request"]["auth"] = "none"
+
+        self._expect_invalid(add_invalid_key_usage)
 
     def test_payload_tampering_invalidates_signature(self) -> None:
         tampered = bytearray(self.catalog_bytes)

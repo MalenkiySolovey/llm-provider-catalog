@@ -6,6 +6,8 @@ The top-level `schemaVersion` selects the descriptor contract; `catalogVersion` 
 
 Capability recipes are declarative data. Supported recipes may describe bounded GET/HEAD requests and JSON response mappings; they do not execute themselves. Unknown capability status must remain unknown. A catalog consumer must enforce the contract it supports and must not infer billing semantics from absent evidence.
 
+The optional `keyUsage` recipe describes API-key quota alongside the existing `usage` and `balance` recipes. `new-api-token-usage` uses one bearer GET, with either an exact `url` or a `path` rooted at the active HTTPS origin. Consumers must restrict the request to that origin and reject redirects. The New API response expresses key-scoped raw quota and an explicit unlimited state. [New API token usage](https://docs.newapi.pro/en/docs/api/management/token-management/usage-token-get)
+
 Host entries are canonical lowercase DNS names or IP literals without a scheme, path, port, wildcard, or surrounding whitespace. Route URLs use HTTPS, except loopback development endpoints permitted by the consumer contract. Route URLs must not embed credentials, query strings, or fragments.
 
 Response pointers use RFC 6901 JSON Pointer escaping. A tilde is permitted only as `~0` or `~1`. Multi-request recipe identifiers must be unique and response mappings may refer only to declared identifiers.

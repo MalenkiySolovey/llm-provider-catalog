@@ -125,6 +125,18 @@ def _check_recipe(recipe: dict, provider_id: str, capability: str, trusted_hosts
     if status != "supported" and any(key in recipe for key in ("request", "requests", "response", "outputs")):
         raise CatalogError(f"{label} must not define executable mappings unless supported")
 
+    if capability == "keyUsage":
+        request = recipe.get("request", {})
+        if (
+            status != "supported"
+            or strategy != "new-api-token-usage"
+            or any(key in recipe for key in ("requests", "response", "outputs"))
+            or request.get("method") != "GET"
+            or request.get("auth") != "bearer"
+            or ("url" in request) == ("path" in request)
+        ):
+            raise CatalogError(f"{label} requires one New API bearer GET to a URL or path")
+
     request_ids: set[str] = set()
     requests = list(recipe.get("requests", []))
     if isinstance(recipe.get("request"), dict):

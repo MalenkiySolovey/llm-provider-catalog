@@ -1,8 +1,8 @@
 {
   "$schema": "./providers.catalog.schema.json",
   "schemaVersion": 1,
-  "catalogVersion": 4,
-  "updatedAt": "2026-09-23T15:00:00Z",
+  "catalogVersion": 5,
+  "updatedAt": "2026-11-22T01:18:41Z",
   "minAppVersion": "0.1.0",
   "providers": [
     {
@@ -645,6 +645,15 @@
               "transform": "centsToUnits"
             }
           }
+        },
+        "keyUsage": {
+          "status": "supported",
+          "strategy": "new-api-token-usage",
+          "request": {
+            "method": "GET",
+            "url": "https://www.hejuapi.com/api/usage/token",
+            "auth": "bearer"
+          }
         }
       },
       "evidence": [
@@ -668,6 +677,13 @@
           "source": "HeJu live read-only qualification and QuantumNous/new-api billing.go at bdef117505247769268b209665fb3ad7554c3da7",
           "verifiedAt": "2026-09-15T17:49:39Z",
           "note": "Ordinary bearer key accepted on both routes; total_usage uses the upstream 1/100 display-unit representation"
+        },
+        {
+          "capability": "keyUsage",
+          "sourceType": "observed-readonly",
+          "source": "https://github.com/QuantumNous/new-api/blob/bdef117505247769268b209665fb3ad7554c3da7/controller/token.go",
+          "verifiedAt": "2026-11-22T00:00:00Z",
+          "note": "Read-only Global route observations confirmed finite and unlimited key quota in raw units. The account wallet and currency are unverified."
         },
         {
           "capability": "balance",
